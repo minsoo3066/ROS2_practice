@@ -1,0 +1,55 @@
+import rclpy # Node 생성 및 설정을 위한 라이브러리
+
+from rclpy.node import Node
+from std_msgs.msg import String
+
+class Publisher(Node): # Node 상속
+
+    def __init__(self): 
+        super().__init__("my_publisher") # 이름 설정
+
+        self.publisher = self.create_publisher(
+            String, # 메시지 종류
+            "chatter", # Topic 종류
+            10 # QoS 설정
+        )
+
+        self.timer = self.create_timer(
+            1.0, # 1sec 주기로
+            self.publish_message # publish_message 실행
+        )
+
+        self.count = 0
+
+
+    def publish_message(self):
+
+        msg = String() # String 메시지 제작
+
+        msg.data = f"Hello ROS2! cont = {self.count}" # 데이터 삽입
+
+        self.publisher.publish(msg) # 토픽 발행 
+
+        self.get_logger().info(
+            f"Publishing: {msg.data}"
+        )
+
+        self.count += 1
+
+
+
+def main(args=None):
+
+    rclpy.init(args=args) # ros2 초기화
+
+    node = Publisher() # 노드 생성
+
+    rclpy.spin(node) # 노드를 계속 실행시키며 ros2 이벤트 처리
+
+    node.destroy_node() # 노드 종료
+    rclpy.shutdown() # ros2 종료
+
+
+
+if __name__ == "__main__":
+    main()
