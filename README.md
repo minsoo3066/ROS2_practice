@@ -2,12 +2,12 @@
 
 ## 학습 목표
 
-- ROS 2의 Node와 통신 구조를 이해한다.
-- Publisher / Subscriber를 직접 구현한다.
-- Parameter를 이용해 실행 시 설정값을 변경하는 방법을 익힌다.
-- Service의 Request / Response 구조와 Client / Server의 역할을 이해한다.
-- Action의 Goal / Feedback / Result 구조를 이해한다.
-- 이후 Launch, QoS, Interface, TF2, Navigation 등 실제 로봇 개발에 필요한 개념으로 확장한다.
+- ROS 2의 Node와 통신 구조 이해
+- Publisher / Subscriber 구현
+- Parameter를 이용해 실행 시 설정값을 변경하는 방법 학습
+- Service의 Request / Response 구조와 Client / Server의 역할 이해
+- Action의 Goal / Feedback / Result 구조 이해
+- 이후 Launch, QoS, Interface, TF2, Navigation 등 실제 로봇 개발에 필요한 개념으로 확장
 
 ## 실습 환경
 
@@ -113,4 +113,4 @@ source install/setup.bash
 
 ## Repository 목적
 
-이 저장소는 완성된 ROS 2 프로젝트보다는 **ROS 2의 각 기능을 작은 코드로 직접 구현하면서 원리를 이해하고, 이후 AMR 및 실제 로봇 개발에 적용하기 위한 학습 기록**을 목적으로 합니다.
+**ROS 2의 각 기능을 작은 코드로 직접 구현하면서 원리를 이해하고, 이후 AMR 및 실제 로봇 개발에 적용하기 위한 학습 기록**
