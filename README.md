@@ -1,9 +1,5 @@
 # ROS2 Practice
 
-ROS 2의 기본 개념을 단순히 따라 치는 방식이 아니라, **직접 Node를 구현하고 통신 구조를 확인하면서 원리를 이해하기 위한 학습 저장소**입니다.
-
-현재는 Python(`rclpy`)을 이용해 ROS 2의 핵심 통신 방식인 Topic, Parameter, Service, Action을 단계적으로 실습하고 있습니다.
-
 ## 학습 목표
 
 - ROS 2의 Node와 통신 구조를 이해한다.
@@ -29,7 +25,7 @@ ROS 2의 기본 개념을 단순히 따라 치는 방식이 아니라, **직접 
 
 ## 목적
 
-ROS 2 프로그램이 어떤 단위로 실행되고, Node들이 Topic을 통해 어떻게 데이터를 주고받는지 이해하는 것이 목표입니다.
+ROS 2 프로그램이 어떤 단위로 실행되고, Node들이 Topic을 통해 어떻게 데이터를 주고받는지 이해하는 것
 
 ## 학습 내용
 
@@ -51,7 +47,7 @@ Node
  └─ Subscriber <─ Topic ── Publisher
 ```
 
-ROS 2에서는 각 Node가 독립적으로 실행되며, DDS를 통해 서로를 발견하고 통신합니다.
+ROS 2에서는 각 Node가 독립적으로 실행되며, DDS를 통해 서로를 발견하고 통신한다.
 
 ---
 
@@ -59,7 +55,7 @@ ROS 2에서는 각 Node가 독립적으로 실행되며, DDS를 통해 서로를
 
 ## 목적
 
-CLI로 ROS 2를 관찰하는 단계에서 벗어나, Python 코드로 직접 Node를 만들어 ROS 2 통신 구조를 구현하는 것이 목표입니다.
+Python 코드로 직접 Node를 만들어 ROS 2 통신 구조를 구현하는 것
 
 ## 학습 내용
 
@@ -93,7 +89,7 @@ my_publisher
 my_subscriber
 ```
 
-Publisher가 주기적으로 메시지를 보내고 Subscriber가 Topic을 통해 해당 메시지를 수신하도록 구현했습니다.
+Publisher가 주기적으로 메시지를 보내고 Subscriber가 Topic을 통해 해당 메시지를 수신하도록 구현
 
 ---
 
@@ -101,18 +97,18 @@ Publisher가 주기적으로 메시지를 보내고 Subscriber가 Topic을 통�
 
 ## 목적
 
-Publisher / Subscriber를 넘어 ROS 2에서 설정값을 관리하고, 요청-응답 통신과 장시간 작업을 처리하는 방법을 이해하는 것이 목표입니다.
+Publisher / Subscriber를 넘어 ROS 2에서 설정값을 관리하고, 요청-응답 통신과 장시간 작업을 처리하는 방법을 이해하는 것이 목표
 
 ## 1. Parameter
 
-Publisher의 timer 주기를 하드코딩하지 않고 Parameter로 관리하도록 변경했습니다.
+Publisher의 timer 주기를 하드코딩하지 않고 Parameter로 관리하도록 변경
 
 ```python
 self.declare_parameter('timer_period', 1.0)
 timer_period = self.get_parameter('timer_period').value
 ```
 
-실행 시 Parameter를 변경할 수 있습니다.
+실행 시 Parameter를 변경 가능
 
 ```bash
 ros2 run my_pubsub publisher --ros-args -p timer_period:=0.2
@@ -132,7 +128,7 @@ ros2 run my_pubsub publisher --ros-args -p timer_period:=0.2
 
 ## 2. Service
 
-`example_interfaces/srv/AddTwoInts`를 사용해 Service Server와 Client를 구현했습니다.
+`example_interfaces/srv/AddTwoInts`를 사용해 Service Server와 Client를 구현
 
 ### 구조
 
@@ -174,9 +170,9 @@ Service : 요청 1회 -> 응답 1회
 
 ## 3. Action
 
-오래 걸리는 작업을 처리하기 위한 ROS 2 Action의 기본 구조를 학습했습니다.
+오래 걸리는 작업을 처리하기 위한 ROS 2 Action의 기본 구조를 학습
 
-`example_interfaces/action/Fibonacci`를 사용해 Action Server를 구현하고 CLI를 Action Client처럼 사용해 테스트했습니다.
+`example_interfaces/action/Fibonacci`를 사용해 Action Server를 구현하고 CLI를 Action Client처럼 사용해 테스트
 
 ### Action 핵심 구조
 
