@@ -14,11 +14,12 @@ class Publisher(Node): # Node 상속
             10 # QoS 설정
         )
 
-        self.declare_parameter('timer_period', 1.0)
-        timer_period = self.get_parameter('timer_period').value
+        self.declare_parameter('timer_period', 1.0) # 타이머 설정값 등록
+        
+        timer_period = self.get_parameter('timer_period').value # 설정값 읽기
 
         self.timer = self.create_timer(
-            timer_period,
+            timer_period, # timer_period sec 주기로
             self.publish_message # publish_message 실행
         )
 
