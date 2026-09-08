@@ -59,6 +59,21 @@
 📘 [Notion 상세 정리 - Day 3](https://app.notion.com/p/3d431ceb5dee8193a517f944a88cba3f?pvs=204)
 
 ---
+## Day 4 - Action Client / GoalHandle / Future 심화
+
+**목적:** Action Client의 비동기 통신 구조와 Goal 생명주기 이해
+
+- Action Client 구현 및 Goal / Feedback / Result 흐름 확인
+- `ClientGoalHandle` / `ServerGoalHandle` 역할과 내부 구조 비교
+- `send_goal_async()` / `get_result_async()`와 Future 관계 이해
+- Feedback callback 및 Result callback 처리
+- `spin_once()`, `destroy_node()`, `shutdown()`을 통한 Node 생명주기 이해
+- `goal_callback`과 Goal ACCEPT / REJECT 구조
+- `ActionClient` 객체와 `Node` 상속 / `super().__init__()` 구조 이해
+
+📘 [Notion 상세 정리 - Day 4](https://app.notion.com/p/3d531ceb5dee81a7a190f0f617daec02?pvs=204)
+
+---
 
 # 현재 패키지 구조
 
@@ -73,7 +88,8 @@ src/my_pubsub/
     ├── subscriber.py
     ├── service_server.py
     ├── service_client.py
-    └── action_server.py
+    ├── action_server.py
+    └── action_client.py
 ```
 
 ---
@@ -88,10 +104,11 @@ src/my_pubsub/
 - [x] Parameter
 - [x] Service
 - [x] Action Server / Goal / Feedback / Result 기초
+- [x] Action Client / GoalHandle / Future
+- [x] Goal ACCEPT / REJECT
 
 다음 학습:
 
-- [ ] Action Client
 - [ ] Action Cancel / 상태 처리
 - [ ] Launch
 - [ ] QoS
