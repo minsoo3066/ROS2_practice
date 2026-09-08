@@ -2,7 +2,7 @@ import time
 import rclpy
 
 from rclpy.node import Node
-from rclpy.action import ActionServer
+from rclpy.action import ActionServer, GoalResponse
 from example_interfaces.action import Fibonacci
 
 class FibonacciActionServer(Node):
@@ -15,7 +15,8 @@ class FibonacciActionServer(Node):
             self, # 속해 있는 Node
             Fibonacci, # Action 타입
             'fibonacci', # Action 이름
-            self.execute_callback # Goal 실행 담당 함수
+            self.execute_callback, # Goal 실행 담당 함수
+            goal_callback=self.goal_callback # 새로운 Goal 요청이 들어올시 실행할 함수
         )
 
         self.get_logger().info('Action Server Ready')
@@ -58,6 +59,23 @@ class FibonacciActionServer(Node):
         result.sequence = feedback.sequence
 
         return result
+
+    def goal_callback(self, goal_request): # ServerGoalHandle이 아닌 Goal 요청 객체가 들어옴
+        # Goal을 받을지 말지 결정하기 전이기 때문에 Handle이 아님
+        # ServerGoalHandle은 Accepted 이후 의미를 가짐
+
+        self.get_logger().info(
+            f'Received Goal: order = {goal_request.order}'
+        )
+
+        if goal_request.order < 2:
+            self.get_logger().info('Goal rejected')
+
+            return GoalResponse.REJECT
+
+        self.get_logger().info('Goal accepted')
+
+        return GoalResponse.ACCEPT
 
 
 def main(args=None):

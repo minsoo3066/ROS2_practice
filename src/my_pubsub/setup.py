@@ -29,6 +29,7 @@ setup(
             'service_server = my_pubsub.service_server:main',
             'service_client = my_pubsub.service_client:main',
             'action_server = my_pubsub.action_server:main',
+            'action_client = my_pubsub.action_client:main',
         ],
     },
 )
