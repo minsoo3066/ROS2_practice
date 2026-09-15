@@ -106,10 +106,27 @@
 
 ---
 
+## Day 6 - Launch 기초 / 여러 Node 동시 실행
+
+**목적:** 여러 ROS 2 Node를 Launch 파일 하나로 관리하는 기본 구조 이해
+
+* Python Launch 파일의 기본 구조 이해
+* `launch_ros.actions.Node`와 `rclpy.node.Node`의 차이 이해
+* Publisher / Subscriber 동시 실행용 `pubsub.launch.py` 작성
+* `setup.py`에 Launch 파일 설치 설정 추가
+* `package.xml`에 `launch`, `launch_ros` 실행 의존성 추가
+* 실제 빌드/실행 검증과 Launch Parameter 전달은 다음 학습에서 진행
+
+📘 [Notion 상세 정리 - Day 6](https://app.notion.com/p/3dc31ceb5dee815a9275d18927842e00?pvs=204)
+
+---
+
 # 현재 패키지 구조
 
 ```text
 src/my_pubsub/
+├── launch/
+│   └── pubsub.launch.py
 ├── package.xml
 ├── setup.py
 ├── setup.cfg
@@ -138,10 +155,11 @@ src/my_pubsub/
 * [x] Action Client / GoalHandle / Future
 * [x] Goal ACCEPT / REJECT
 * [x] Action Cancel / 상태 처리
+* [x] Launch 기초 및 Launch 파일 작성
 
 다음 학습:
 
-* [ ] Launch
+* [ ] Launch 실행 검증 / Parameter / Remapping / Argument
 * [ ] QoS
 * [ ] Executor / Callback Group / MultiThread
 * [ ] Custom Interface (`.msg`, `.srv`, `.action`)
