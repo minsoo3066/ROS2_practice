@@ -1,6 +1,7 @@
 import rclpy # Node 생성 및 설정을 위한 라이브러리
 
 from rclpy.node import Node
+from rclpy.qos import QoSProfile, ReliabilityPolicy, DurabilityPolicy
 from std_msgs.msg import String
 
 class Publisher(Node): # Node 상속
@@ -8,10 +9,16 @@ class Publisher(Node): # Node 상속
     def __init__(self): 
         super().__init__("my_publisher") # 이름 설정
 
+        qos_profile = QoSProfile(
+            depth=10,
+            reliability=ReliabilityPolicy.RELIABLE,
+            durability=DurabilityPolicy.VOLATILE
+        )
+
         self.publisher = self.create_publisher(
             String, # 메시지 종류
             "chatter", # Topic 종류
-            10 # QoS 설정
+            qos_profile # QoS 설정
         )
 
         self.declare_parameter('timer_period', 1.0) # 타이머 설정값 등록
