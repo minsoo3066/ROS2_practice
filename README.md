@@ -115,9 +115,39 @@
 * Publisher / Subscriber 동시 실행용 `pubsub.launch.py` 작성
 * `setup.py`에 Launch 파일 설치 설정 추가
 * `package.xml`에 `launch`, `launch_ros` 실행 의존성 추가
-* 실제 빌드/실행 검증과 Launch Parameter 전달은 다음 학습에서 진행
+* Launch 파일 빌드 및 실행 검증
 
 📘 [Notion 상세 정리 - Day 6](https://app.notion.com/p/3dc31ceb5dee815a9275d18927842e00?pvs=204)
+
+---
+
+## Day 7 - Launch 심화 / QoS
+
+**목적:** Launch 실행 설정을 확장하고 ROS 2 통신의 QoS 정책과 호환성 이해
+
+### Launch 심화
+
+* Launch에서 Publisher Parameter 전달 및 `timer_period` override
+* `name`을 이용한 Node 이름 변경
+* `remappings`를 이용한 Topic 이름 변경
+* `DeclareLaunchArgument` / `LaunchConfiguration`을 이용한 실행 시 값 전달
+* Namespace를 이용한 Node / Topic 그룹 분리
+* `robot1`, `robot2` Namespace로 동일 Publisher / Subscriber 구성 동시 실행
+* 동일 코드를 재사용하면서 Robot별 Parameter / Topic 분리 확인
+
+### QoS
+
+* 기존 Publisher / Subscriber의 QoS 숫자 `10`을 `QoSProfile`로 명시화
+* History / Depth 개념 이해
+* `RELIABLE` / `BEST_EFFORT` 차이 및 Requested / Offered 호환성 이해
+* `VOLATILE` / `TRANSIENT_LOCAL` 차이 이해
+* Publisher / Subscriber 각각의 QoS 설정과 호환성 확인
+* Sensor Data QoS와 `qos_profile_sensor_data` 개념 확인
+* `ros2 topic info <topic> --verbose`를 통한 실제 QoS 확인 방법 학습
+
+📘 [Notion 상세 정리 - Day 7](https://app.notion.com/p/3dd31ceb5dee81988eadf24fdfdb84b3?pvs=204)
+
+> 다음 학습부터 `Executor / Callback Group / MultiThread`를 정식으로 진행한다.
 
 ---
 
@@ -156,17 +186,19 @@ src/my_pubsub/
 * [x] Goal ACCEPT / REJECT
 * [x] Action Cancel / 상태 처리
 * [x] Launch 기초 및 Launch 파일 작성
+* [x] Launch 실행 검증 / Parameter / Remapping / Argument / Namespace
+* [x] QoS
 
 다음 학습:
 
-* [ ] Launch 실행 검증 / Parameter / Remapping / Argument
-* [ ] QoS
 * [ ] Executor / Callback Group / MultiThread
 * [ ] Custom Interface (`.msg`, `.srv`, `.action`)
 * [ ] TF2
 * [ ] Sensor / Robot Data
 * [ ] URDF / RViz / Gazebo
-* [ ] Navigation / Manipulation
+* [ ] SLAM
+* [ ] Navigation2
+* [ ] 실제 AMR 구조 적용
 
 ---
 
