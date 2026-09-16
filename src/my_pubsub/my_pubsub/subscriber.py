@@ -1,5 +1,6 @@
 import rclpy
 from rclpy.node import Node
+from rclpy.qos import QoSProfile, ReliabilityPolicy, DurabilityPolicy
 from std_msgs.msg import String
 
 
@@ -9,11 +10,17 @@ class Subscriber(Node):
 
         super().__init__("my_subscriber")
 
+        qos_profile = QoSProfile(
+            depth=10,
+            reliability=ReliabilityPolicy.RELIABLE,
+            durability=DurabilityPolicy.VOLATILE
+        )
+
         self.subscription = self.create_subscription(
             String,
             "chatter",
             self.listener_callback,
-            10
+            qos_profile
         )
 
     def listener_callback(self, msg):
