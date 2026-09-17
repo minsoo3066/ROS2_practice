@@ -101,6 +101,7 @@ class FibonacciActionServer(Node):
 
         self.get_logger().info('Received cancel request')
 
+
         return CancelResponse.ACCEPT
 
 

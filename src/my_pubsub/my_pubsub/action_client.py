@@ -106,6 +106,7 @@ class FibonacciActionClient(Node):
             f'Feedback: {feedback.sequence}'
         )
 
+        # Cancle 조건
         if len(feedback.sequence) >= 5 and not self.cancel_sent and self.goal_handle is not None:
 
             self.cancel_sent = True
