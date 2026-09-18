@@ -149,6 +149,29 @@
 
 > 다음 학습부터 `Executor / Callback Group / MultiThread`를 정식으로 진행한다.
 
+
+---
+
+## Day 8 - Executor / Callback Group / MultiThread
+
+**목적:** ROS 2 callback 실행 구조와 MultiThread 환경에서의 동시 실행 조건 이해
+
+* SingleThreadedExecutor에서 긴 callback이 다른 callback 실행을 지연시키는 현상 확인
+* MultiThreadedExecutor를 적용해 여러 worker thread를 사용하는 구조 이해
+* 기본 `MutuallyExclusiveCallbackGroup`에서는 Thread가 여러 개여도 같은 Group의 callback이 동시에 실행되지 않는 점 확인
+* FAST / SLOW Timer를 서로 다른 `MutuallyExclusiveCallbackGroup`으로 분리해 동시 실행 확인
+* 하나의 `ReentrantCallbackGroup` 안에서 callback 동시 실행 확인
+* Reentrant 사용 시 공유 변수 / 로봇 제어 / Serial / 파일 등 공유 자원 접근 주의점 학습
+* 기존 Action Cancel 코드와 `ReentrantCallbackGroup + MultiThreadedExecutor` 구조 연결
+* `cancel_callback()`, `is_cancel_requested`, `goal_handle.canceled()` 역할 재정리
+* `num_threads=2` / `num_threads=4` 비교 및 `threading.get_ident()`으로 실제 worker thread 확인
+* Python GIL과 MultiThreadedExecutor의 관계 이해
+* 하나의 Executor가 여러 Node를 `add_node()`로 관리할 수 있는 구조 학습
+
+📘 [Notion 상세 정리 - Day 8](https://app.notion.com/p/3df31ceb5dee81d3a8cee3fc7393939b?pvs=204)
+
+> 다음 학습은 하나의 Executor에서 Publisher / Subscriber Node를 함께 실행하는 실습 확인 후 Custom Interface로 진행한다.
+
 ---
 
 # 현재 패키지 구조
@@ -191,7 +214,7 @@ src/my_pubsub/
 
 다음 학습:
 
-* [ ] Executor / Callback Group / MultiThread
+* [ ] Multi-node Executor 실행 확인
 * [ ] Custom Interface (`.msg`, `.srv`, `.action`)
 * [ ] TF2
 * [ ] Sensor / Robot Data
