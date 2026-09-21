@@ -35,6 +35,8 @@ setup(
             'service_client = my_pubsub.service_client:main',
             'action_server = my_pubsub.action_server:main',
             'action_client = my_pubsub.action_client:main',
+            'executor_test = my_pubsub.executor_test:main',
+            'multi_node_executor = my_pubsub.multi_node_executor:main',
         ],
     },
 )
