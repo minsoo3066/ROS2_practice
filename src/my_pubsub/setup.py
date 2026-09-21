@@ -37,6 +37,12 @@ setup(
             'action_client = my_pubsub.action_client:main',
             'executor_test = my_pubsub.executor_test:main',
             'multi_node_executor = my_pubsub.multi_node_executor:main',
+            'custom_publisher = my_pubsub.custom_publisher:main',
+            'custom_subscriber = my_pubsub.custom_subscriber:main',
+            'custom_service_server = my_pubsub.custom_service_server:main',
+            'custom_service_client = my_pubsub.custom_service_client:main',
+            'custom_action_server = my_pubsub.custom_action_server:main',
+            'custom_action_client = my_pubsub.custom_action_client:main',
         ],
     },
 )

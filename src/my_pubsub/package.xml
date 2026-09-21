@@ -12,6 +12,8 @@
   <depend>std_msgs</depend>
   <depend>example_interfaces</depend>
   <depend>action_msgs</depend>
+  <depend>my_interfaces</depend>
+  <depend>geometry_msgs</depend>
 
   <exec_depend>launch</exec_depend>
   <exec_depend>launch_ros</exec_depend>

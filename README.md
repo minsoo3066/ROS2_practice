@@ -173,25 +173,154 @@
 > 다음 학습은 하나의 Executor에서 Publisher / Subscriber Node를 함께 실행하는 실습 확인 후 Custom Interface로 진행한다.
 
 ---
+---
 
-# 현재 패키지 구조
+## Day 8 - Executor / Callback Group / MultiThread
+
+**목적:** ROS 2 Callback 실행 구조와 MultiThread 환경에서 Callback의 동시 실행 조건 이해
+
+### Executor
+
+* `rclpy.spin(node)`을 이용한 SingleThreadedExecutor 동작 확인
+* 긴 Callback이 실행될 때 다른 Callback의 실행이 지연되는 현상 확인
+* `MultiThreadedExecutor`를 이용한 여러 Worker Thread 구조 이해
+* `num_threads=2`, `num_threads=4` 비교
+* `threading.get_ident()`을 이용해 실제 Callback이 실행되는 Thread 확인
+* Thread 개수가 많다고 항상 성능이 좋아지는 것은 아니라는 점 이해
+* Python GIL과 MultiThreadedExecutor의 관계 이해
+
+### Callback Group
+
+* 기본 Callback Group이 `MutuallyExclusiveCallbackGroup`이라는 점 확인
+* 같은 `MutuallyExclusiveCallbackGroup`의 Callback은 MultiThreadedExecutor에서도 동시에 실행되지 않음
+* 서로 다른 `MutuallyExclusiveCallbackGroup`으로 분리하면 동시 실행 가능
+* `ReentrantCallbackGroup`을 이용해 같은 Group 내부 Callback의 동시 실행 확인
+* 공유 변수, Robot API, Serial, 파일 등 공유 자원에 대한 동시 접근 주의
+
+### Action Cancel과 Executor 연결
+
+* 기존 Action Server의 `ReentrantCallbackGroup` 구조 재확인
+* `MultiThreadedExecutor(num_threads=2)`가 필요한 이유 이해
+* `cancel_callback()`은 Cancel 요청의 ACCEPT / REJECT를 결정
+* `goal_handle.is_cancel_requested`로 실행 중 Cancel 요청 확인
+* `goal_handle.canceled()`로 Goal을 최종 CANCELED 상태로 변경
+* 긴 `execute_callback()` 실행 중에도 Cancel 요청을 처리할 수 있는 구조 이해
+
+### Multi-node Executor
+
+* 하나의 Executor에 여러 Node를 `add_node()`로 등록할 수 있는 구조 이해
+* Publisher / Subscriber를 하나의 Process에서 관리하는 구조 학습
+* Node와 Process가 서로 다른 개념이라는 점 이해
+* Launch로 여러 Process를 실행하는 방식과 하나의 Executor에서 여러 Node를 실행하는 방식 비교
+
+📘 [Notion 상세 정리 - Day 8](https://app.notion.com/p/3df31ceb5dee81d3a8cee3fc7393939b?pvs=204)
+
+---
+
+## Day 9 - Custom Interface (.msg / .srv / .action)
+
+**목적:** ROS 2에서 프로젝트에 필요한 Message / Service / Action 타입을 직접 정의하고 사용하는 방법 이해
+
+### Interface Package
+
+* Custom Interface 전용 `my_interfaces` 패키지 생성
+* Interface 패키지를 `ament_cmake` 방식으로 구성
+* `rosidl_default_generators`를 이용한 Interface 코드 생성 구조 이해
+* `my_pubsub`와 `my_interfaces` 패키지 역할 분리
+
+### Custom Message
+
+* `RobotStatus.msg` 작성
 
 ```text
-src/my_pubsub/
-├── launch/
-│   └── pubsub.launch.py
-├── package.xml
-├── setup.py
-├── setup.cfg
-└── my_pubsub/
-    ├── __init__.py
-    ├── publisher.py
-    ├── subscriber.py
-    ├── service_server.py
-    ├── service_client.py
-    ├── action_server.py
-    └── action_client.py
+string robot_name
+int32 battery
+bool is_moving
 ```
+
+* `RobotStatus`를 사용하는 Custom Publisher / Subscriber 구현
+* `/robot_status` Topic을 통해 Custom Message 통신 확인
+* `ros2 interface show`, `ros2 topic type`, `ros2 topic echo`로 Interface 확인
+
+### Custom Service
+
+* `SetTarget.srv` 작성
+
+```text
+float64 x
+float64 y
+---
+bool success
+string message
+```
+
+* `.srv`의 Request / Response 구조 이해
+* Custom Service Server / Client 구현
+* `/set_target` Service 호출 확인
+
+### Custom Action
+
+* `MoveRobot.action` 작성
+
+```text
+float64 x
+float64 y
+---
+bool success
+string message
+---
+float64 progress
+```
+
+* `.action`의 Goal / Result / Feedback 구조 이해
+* Custom Action Server / Client 구현
+* Goal 전달, Feedback 수신, Result 반환 흐름 확인
+* `ros2 action send_goal --feedback`을 이용한 CLI 테스트
+
+### Interface 생성 과정
+
+```text
+.msg / .srv / .action
+        ↓
+rosidl_generate_interfaces()
+        ↓
+colcon build
+        ↓
+Python / C++ Interface 코드 생성
+        ↓
+ROS 2 Node에서 사용
+```
+
+* `my_pubsub/package.xml`에 `my_interfaces` dependency 추가
+* Interface를 사용하는 패키지 간 dependency 관계 이해
+
+### Nested Message / Array / Constant
+
+* `RobotCommand.msg` 작성
+
+```text
+uint8 MODE_IDLE=0
+uint8 MODE_MOVING=1
+uint8 MODE_ERROR=2
+
+string robot_name
+geometry_msgs/Pose target_pose
+float64 speed
+bool enable
+float64[6] joint_angles
+uint8 mode
+```
+
+* Custom Message 안에서 `geometry_msgs/Pose` 같은 기존 ROS Message 사용
+* Nested Message 구조 이해
+* 가변 길이 배열 `[]` 문법 이해
+* 고정 길이 배열 `[6]` 문법 이해
+* Message 상수 정의 및 사용 방법 학습
+* `geometry_msgs` dependency 추가 방법 학습
+
+📘 [Notion 상세 정리 - Day 9](https://app.notion.com/p/3e231ceb5dee812a928dc2abc57ba0a5?pvs=204)
+
+> 다음 학습에서는 `RobotCommand`를 실제 Publisher에서 사용해 `Pose`, 배열, 상수 값을 전송한 뒤 Custom Interface 단원을 마무리하고 TF2로 진행한다.
 
 ---
 
@@ -211,17 +340,18 @@ src/my_pubsub/
 * [x] Launch 기초 및 Launch 파일 작성
 * [x] Launch 실행 검증 / Parameter / Remapping / Argument / Namespace
 * [x] QoS
+* [x] Executor / Callback Group / MultiThread
+* [x] Custom Interface (`.msg`, `.srv`, `.action`)
 
 다음 학습:
 
-* [ ] Multi-node Executor 실행 확인
-* [ ] Custom Interface (`.msg`, `.srv`, `.action`)
 * [ ] TF2
 * [ ] Sensor / Robot Data
 * [ ] URDF / RViz / Gazebo
 * [ ] SLAM
 * [ ] Navigation2
 * [ ] 실제 AMR 구조 적용
+
 
 ---
 
