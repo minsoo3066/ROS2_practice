@@ -43,6 +43,10 @@ setup(
             'custom_service_client = my_pubsub.custom_service_client:main',
             'custom_action_server = my_pubsub.custom_action_server:main',
             'custom_action_client = my_pubsub.custom_action_client:main',
+            'robot_command_publisher = my_pubsub.robot_command_publisher:main',
+            'robot_command_subscriber = my_pubsub.robot_command_subscriber:main',
+            'dynamic_tf_broadcaster = my_pubsub.dynamic_tf_broadcaster:main',
+            'tf_listener = my_pubsub.tf_listener:main',
         ],
     },
 )

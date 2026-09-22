@@ -149,30 +149,6 @@
 
 > 다음 학습부터 `Executor / Callback Group / MultiThread`를 정식으로 진행한다.
 
-
----
-
-## Day 8 - Executor / Callback Group / MultiThread
-
-**목적:** ROS 2 callback 실행 구조와 MultiThread 환경에서의 동시 실행 조건 이해
-
-* SingleThreadedExecutor에서 긴 callback이 다른 callback 실행을 지연시키는 현상 확인
-* MultiThreadedExecutor를 적용해 여러 worker thread를 사용하는 구조 이해
-* 기본 `MutuallyExclusiveCallbackGroup`에서는 Thread가 여러 개여도 같은 Group의 callback이 동시에 실행되지 않는 점 확인
-* FAST / SLOW Timer를 서로 다른 `MutuallyExclusiveCallbackGroup`으로 분리해 동시 실행 확인
-* 하나의 `ReentrantCallbackGroup` 안에서 callback 동시 실행 확인
-* Reentrant 사용 시 공유 변수 / 로봇 제어 / Serial / 파일 등 공유 자원 접근 주의점 학습
-* 기존 Action Cancel 코드와 `ReentrantCallbackGroup + MultiThreadedExecutor` 구조 연결
-* `cancel_callback()`, `is_cancel_requested`, `goal_handle.canceled()` 역할 재정리
-* `num_threads=2` / `num_threads=4` 비교 및 `threading.get_ident()`으로 실제 worker thread 확인
-* Python GIL과 MultiThreadedExecutor의 관계 이해
-* 하나의 Executor가 여러 Node를 `add_node()`로 관리할 수 있는 구조 학습
-
-📘 [Notion 상세 정리 - Day 8](https://app.notion.com/p/3df31ceb5dee81d3a8cee3fc7393939b?pvs=204)
-
-> 다음 학습은 하나의 Executor에서 Publisher / Subscriber Node를 함께 실행하는 실습 확인 후 Custom Interface로 진행한다.
-
----
 ---
 
 ## Day 8 - Executor / Callback Group / MultiThread
@@ -323,6 +299,62 @@ uint8 mode
 > 다음 학습에서는 `RobotCommand`를 실제 Publisher에서 사용해 `Pose`, 배열, 상수 값을 전송한 뒤 Custom Interface 단원을 마무리하고 TF2로 진행한다.
 
 ---
+
+---
+
+## Day 10 - TF2 기초 / Broadcaster / Listener / Buffer
+
+**목적:** ROS 2에서 여러 좌표계(Frame)의 관계를 관리하고 변환하는 TF2의 기본 구조 이해
+
+### Frame / Transform
+
+* Frame은 각 물체가 사용하는 좌표 기준
+* Transform은 두 Frame 사이의 위치와 자세 관계
+* Transform은 Translation과 Rotation으로 구성
+* Rotation은 Quaternion `x / y / z / w`로 표현
+* Pose는 물체의 위치/자세, Transform은 두 Frame 사이의 관계라는 차이 이해
+
+### TF Tree
+
+* Parent / Child Frame 관계 이해
+* `world → base_link → camera` 구조 실습
+* 여러 Transform을 연결해 `world → camera`를 TF2가 자동 계산하는 것 확인
+* 역방향 Transform도 TF2가 자동 계산하는 것 확인
+
+### Static Transform
+
+* `static_transform_publisher` 사용
+* `world → base_link`, `base_link → camera` Transform 생성
+* `tf2_echo`를 이용한 Transform 조회
+* Static Transform이 `/tf_static`으로 전달되는 구조 이해
+
+### Dynamic Transform
+
+* Python `TransformBroadcaster` 사용
+* `TransformStamped` 구조 이해
+* 움직이는 `world → base_link` Transform 구현
+* Timestamp를 이용해 시간에 따라 변하는 Transform 표현
+* Dynamic Transform이 `/tf`으로 전달되는 구조 이해
+* 움직이는 `base_link`에 고정된 `camera` Frame도 함께 이동하는 것 확인
+
+### Broadcaster / Listener / Buffer
+
+* `TransformBroadcaster`는 Transform을 TF2에 제공
+* `TransformListener`는 `/tf`, `/tf_static`을 수신
+* `Buffer`는 Transform을 저장하고 Frame 간 관계를 조회 / 계산
+* `lookup_transform()`으로 Python에서 `world → camera` Transform 조회
+* 필요한 Frame이 없을 때 `TransformException` 처리
+
+### 로봇 팔과 TF2
+
+* 로봇 팔에서는 `base_link → link1 → ... → gripper_link` 형태의 TF Tree 사용
+* 움직이는 Joint의 Transform과 고정 센서의 Transform 차이 이해
+* 이후 URDF / `joint_states` / `robot_state_publisher`와 연결 예정
+
+📘 [Notion 상세 정리 - Day 10](https://app.notion.com/p/3e331ceb5dee81a1bc71e65208fdd00f?pvs=204)
+
+> TF2 개념이 중요하고 난도가 높으므로 다음 학습 시작 시 Frame / Transform / Static-Dynamic / Broadcaster-Listener-Buffer를 먼저 복습한 뒤 좌표 변환 실습을 계속한다.
+
 
 # 학습 진행 방향
 
